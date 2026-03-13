@@ -9,15 +9,15 @@ let currentMode = 'travelling'; // 'travelling' | 'hosting'
 
 /* ============ DATA ============ */
 const vehicles = [
-  { id:1, emoji:'🚗', model:'Toyota Vios 1.3E', brand:'Toyota', type:'Sedan', price:2500, company:'ManilaRide Rentals', location:'Makati, Metro Manila', rating:4.8, reviews:124, seats:5, transmission:'Automatic', fuel:'Gasoline', badge:'Popular', features:['Air Conditioning','GPS Navigation','Bluetooth','Backup Camera'] },
-  { id:2, emoji:'🚙', model:'Honda BR-V 1.5S', brand:'Honda', type:'SUV', price:3200, company:'CebuDrive Co.', location:'Cebu City, Cebu', rating:4.9, reviews:89, seats:7, transmission:'CVT', fuel:'Gasoline', badge:'Top Rated', features:['Air Conditioning','GPS Navigation','7 Seats','USB Charging'] },
-  { id:3, emoji:'🚐', model:'Toyota HiAce GL', brand:'Toyota', type:'Van', price:4800, company:'LagasLakbay Transport', location:'Davao City, Davao', rating:4.7, reviews:56, seats:12, transmission:'Manual', fuel:'Diesel', badge:'', features:['Air Conditioning','Large Luggage Space','Driver Included'] },
-  { id:4, emoji:'🏎️', model:'Ford Mustang GT', brand:'Ford', type:'Sports', price:8500, company:'PremiumDrive PH', location:'BGC, Taguig', rating:5.0, reviews:34, seats:4, transmission:'Automatic', fuel:'Gasoline', badge:'Premium', features:['Air Conditioning','Sports Mode','Leather Seats','Sunroof'] },
-  { id:5, emoji:'🚌', model:'Hyundai H350 Bus', brand:'Hyundai', type:'Bus', price:6500, company:'PanayWheels Inc.', location:'Iloilo City, Iloilo', rating:4.6, reviews:45, seats:20, transmission:'Automatic', fuel:'Diesel', badge:'', features:['Air Conditioning','Sound System','Group Travel'] },
-  { id:6, emoji:'🚗', model:'Mitsubishi Mirage G4', brand:'Mitsubishi', type:'Sedan', price:1900, company:'BaguioCars Rental', location:'Baguio City, Benguet', rating:4.5, reviews:78, seats:5, transmission:'CVT', fuel:'Gasoline', badge:'Best Value', features:['Air Conditioning','Fuel Efficient','Easy Parking'] },
-  { id:7, emoji:'🚙', model:'Ford Everest Trend', brand:'Ford', type:'SUV', price:4200, company:'ManilaRide Rentals', location:'Quezon City, Metro Manila', rating:4.8, reviews:92, seats:7, transmission:'Automatic', fuel:'Diesel', badge:'', features:['Air Conditioning','4x4','GPS','7 Seats'] },
-  { id:8, emoji:'🚗', model:'Suzuki Ciaz GL', brand:'Suzuki', type:'Sedan', price:2100, company:'LuzViMinRentals', location:'Pasig, Metro Manila', rating:4.6, reviews:67, seats:5, transmission:'Automatic', fuel:'Gasoline', badge:'', features:['Air Conditioning','Smart Key','USB Ports'] },
-  { id:9, emoji:'🏎️', model:'BMW 320i Sport', brand:'BMW', type:'Sports', price:9800, company:'PremiumDrive PH', location:'Makati, Metro Manila', rating:4.9, reviews:28, seats:5, transmission:'Automatic', fuel:'Gasoline', badge:'Luxury', features:['Leather Interior','Sunroof','Premium Sound'] },
+  { id:1, img:'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=600&q=80', model:'Toyota Vios 1.3E', brand:'Toyota', type:'Sedan', price:2500, company:'ManilaRide Rentals', location:'Makati, Metro Manila', rating:4.8, reviews:124, seats:5, transmission:'Automatic', fuel:'Gasoline', badge:'Popular', features:['Air Conditioning','GPS Navigation','Bluetooth','Backup Camera'] },
+  { id:2, img:'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=600&q=80', model:'Honda BR-V 1.5S', brand:'Honda', type:'SUV', price:3200, company:'CebuDrive Co.', location:'Cebu City, Cebu', rating:4.9, reviews:89, seats:7, transmission:'CVT', fuel:'Gasoline', badge:'Top Rated', features:['Air Conditioning','GPS Navigation','7 Seats','USB Charging'] },
+  { id:3, img:'https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=600&q=80', model:'Toyota HiAce GL', brand:'Toyota', type:'Van', price:4800, company:'LagasLakbay Transport', location:'Davao City, Davao', rating:4.7, reviews:56, seats:12, transmission:'Manual', fuel:'Diesel', badge:'', features:['Air Conditioning','Large Luggage Space','Driver Included'] },
+  { id:4, img:'https://images.unsplash.com/photo-1584345604476-8ec5e12e42dd?w=600&q=80', model:'Ford Mustang GT', brand:'Ford', type:'Sports', price:8500, company:'PremiumDrive PH', location:'BGC, Taguig', rating:5.0, reviews:34, seats:4, transmission:'Automatic', fuel:'Gasoline', badge:'Premium', features:['Air Conditioning','Sports Mode','Leather Seats','Sunroof'] },
+  { id:5, img:'https://images.unsplash.com/photo-1570125717084-743e5ac57fd6?w=600&q=80', model:'Hyundai H350 Bus', brand:'Hyundai', type:'Bus', price:6500, company:'PanayWheels Inc.', location:'Iloilo City, Iloilo', rating:4.6, reviews:45, seats:20, transmission:'Automatic', fuel:'Diesel', badge:'', features:['Air Conditioning','Sound System','Group Travel'] },
+  { id:6, img:'https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=600&q=80', model:'Mitsubishi Mirage G4', brand:'Mitsubishi', type:'Sedan', price:1900, company:'BaguioCars Rental', location:'Baguio City, Benguet', rating:4.5, reviews:78, seats:5, transmission:'CVT', fuel:'Gasoline', badge:'Best Value', features:['Air Conditioning','Fuel Efficient','Easy Parking'] },
+  { id:7, img:'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=600&q=80', model:'Ford Everest Trend', brand:'Ford', type:'SUV', price:4200, company:'ManilaRide Rentals', location:'Quezon City, Metro Manila', rating:4.8, reviews:92, seats:7, transmission:'Automatic', fuel:'Diesel', badge:'', features:['Air Conditioning','4x4','GPS','7 Seats'] },
+  { id:8, img:'https://images.unsplash.com/photo-1502877338535-766e1452684a?w=600&q=80', model:'Suzuki Ciaz GL', brand:'Suzuki', type:'Sedan', price:2100, company:'LuzViMinRentals', location:'Pasig, Metro Manila', rating:4.6, reviews:67, seats:5, transmission:'Automatic', fuel:'Gasoline', badge:'', features:['Air Conditioning','Smart Key','USB Ports'] },
+  { id:9, img:'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600&q=80', model:'BMW 320i Sport', brand:'BMW', type:'Sports', price:9800, company:'PremiumDrive PH', location:'Makati, Metro Manila', rating:4.9, reviews:28, seats:5, transmission:'Automatic', fuel:'Gasoline', badge:'Luxury', features:['Leather Interior','Sunroof','Premium Sound'] },
 ];
 
 const dashboardVehicles = [
@@ -152,7 +152,8 @@ function renderVehicleCard(v) {
   return `
     <div class="vehicle-card" onclick="showCarDetails(${v.id})">
       <div class="car-img-wrap">
-        <div class="car-img">${v.emoji}</div>
+        <img class="car-img-real" src="${v.img}" alt="${v.model}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="car-img-fallback" style="display:none">🚗</div>
         <div class="card-badge-overlay">${badge}</div>
         <button class="card-favorite" onclick="toggleFav(event,this)">&#x2661;</button>
       </div>
@@ -177,7 +178,8 @@ function renderLandingCard(v) {
   return `
     <div class="landing-card" onclick="showCarDetails(${v.id})">
       <div class="lc-img-wrap">
-        <div class="lc-img">${v.emoji}</div>
+        <img class="lc-img-real" src="${v.img}" alt="${v.model}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="lc-img-fallback" style="display:none">🚗</div>
         ${badge}
         <button class="lc-fav" onclick="toggleFav(event,this)">&#x2661;</button>
       </div>
@@ -254,10 +256,13 @@ function showCarDetails(id) {
   const featsEl = document.getElementById('features-list');
   if (featsEl) featsEl.innerHTML = v.features.map(f => `<div class="feature-tag">&#x2713; ${f}</div>`).join('');
 
-  // Gallery emoji
-  page.querySelectorAll('.detail-emoji-big').forEach(el => el.textContent = v.emoji);
+  // Gallery — use real image
+  const galMain = page.querySelector('.gallery-main');
+  if (galMain) {
+    galMain.innerHTML = `<img src="${v.img}" alt="${v.model}" style="width:100%;height:100%;object-fit:cover;border-radius:0" onerror="this.outerHTML='<div style=\'display:flex;align-items:center;justify-content:center;font-size:8rem;width:100%;height:100%\'>🚗</div>'">`;
+  }
   page.querySelectorAll('.gallery-thumb').forEach((t,i) => {
-    if (i === 0) t.textContent = v.emoji;
+    if (i === 0) t.innerHTML = `<img src="${v.img}" alt="${v.model}" style="width:100%;height:100%;object-fit:cover" onerror="this.outerHTML='🚗'">`;
   });
 
   // Reset booking
@@ -521,7 +526,26 @@ function showToast(type, title, msg) {
 }
 
 /* ============ INIT ============ */
+
+/* ============ DARK MODE ============ */
+function toggleDarkMode() {
+  const isDark = document.documentElement.classList.toggle('dark');
+  localStorage.setItem('sakyan-theme', isDark ? 'dark' : 'light');
+  const btn = document.getElementById('dark-mode-btn');
+  if (btn) btn.textContent = isDark ? '☀️' : '🌙';
+}
+function initTheme() {
+  const saved = localStorage.getItem('sakyan-theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (saved === 'dark' || (!saved && prefersDark)) {
+    document.documentElement.classList.add('dark');
+    const btn = document.getElementById('dark-mode-btn');
+    if (btn) btn.textContent = '☀️';
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
   showPage('page-landing');
   renderLandingSections();
   initMarketplace();

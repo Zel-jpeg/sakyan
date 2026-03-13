@@ -89,6 +89,12 @@
    .navbar-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; position: relative; }
    .btn-list-car { background: transparent; border: none; font-size: .9375rem; font-weight: 600; color: var(--text); padding: 8px 14px; border-radius: var(--radius-full); cursor: pointer; transition: var(--transition); }
    .btn-list-car:hover { background: var(--bg); }
+   .dark-toggle-btn {
+     width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--border);
+     background: #fff; font-size: 1.1rem; cursor: pointer; transition: var(--transition);
+     display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+   }
+   .dark-toggle-btn:hover { background: var(--bg); transform: rotate(20deg); }
    
    .nav-user-pill {
      display: flex; align-items: center; gap: 10px;
@@ -179,12 +185,12 @@
    .lc-img-wrap {
      position: relative; border-radius: var(--radius-lg); overflow: hidden;
      background: linear-gradient(135deg,#EFF6FF,#F0FDFA); aspect-ratio: 4/3;
-     display: flex; align-items: center; justify-content: center;
      margin-bottom: 12px; transition: var(--transition);
    }
    .landing-card:hover .lc-img-wrap { box-shadow: var(--shadow-lg); }
-   .lc-img { font-size: 5.5rem; transition: transform 0.4s ease; }
-   .landing-card:hover .lc-img { transform: scale(1.06); }
+   .lc-img-real { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; position: absolute; inset: 0; }
+   .lc-img-fallback { font-size: 5.5rem; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+   .landing-card:hover .lc-img-real { transform: scale(1.06); }
    .lc-badge {
      position: absolute; top: 10px; left: 10px;
      background: rgba(255,255,255,0.95); backdrop-filter: blur(8px);
@@ -248,8 +254,10 @@
    .vehicle-card { background: var(--card); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); border: 1px solid var(--border-light); transition: var(--transition); cursor: pointer; }
    .vehicle-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
    .vehicle-card:hover .car-img { transform: scale(1.06); }
-   .car-img-wrap { overflow: hidden; height: 200px; background: linear-gradient(135deg,#EFF6FF,#F0FDFA); position: relative; display: flex; align-items: center; justify-content: center; }
-   .car-img { font-size: 5rem; transition: transform 0.4s ease; }
+   .car-img-wrap { overflow: hidden; height: 200px; background: linear-gradient(135deg,#EFF6FF,#F0FDFA); position: relative; }
+   .car-img-real { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; display: block; }
+   .car-img-fallback { font-size: 5rem; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+   .vehicle-card:hover .car-img-real { transform: scale(1.06); }
    .card-badge-overlay { position: absolute; top: 12px; left: 12px; }
    .card-favorite { position: absolute; top: 12px; right: 12px; width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: var(--text); border: 1px solid rgba(255,255,255,0.5); transition: var(--transition); }
    .card-favorite:hover { background: #fff; color: #EF4444; transform: scale(1.1); }
@@ -616,3 +624,238 @@
      .mbc-dates { gap: 10px; }
    }
    @media (max-width: 480px) { .wishlist-grid { grid-template-columns: 1fr; } }
+   
+   
+   /* ============================================
+      DARK MODE
+      ============================================ */
+   
+   :root.dark {
+     --primary: #3B82F6;
+     --primary-dark: #2563EB;
+     --primary-light: #1E3A5F;
+     --teal: #2DD4BF;
+     --teal-dark: #14B8A6;
+     --teal-light: #0D2E2E;
+     --bg: #0F172A;
+     --card: #1E293B;
+     --text: #F1F5F9;
+     --text-secondary: #94A3B8;
+     --text-muted: #64748B;
+     --border: #2D3748;
+     --border-light: #1E293B;
+     --shadow-sm: 0 1px 3px rgba(0,0,0,0.4);
+     --shadow: 0 4px 16px rgba(0,0,0,0.5);
+     --shadow-lg: 0 12px 40px rgba(0,0,0,0.6);
+     --shadow-xl: 0 24px 64px rgba(0,0,0,0.7);
+   }
+   
+   /* Base */
+   .dark body { background: var(--bg); color: var(--text); }
+   
+   /* Navbar */
+   .dark .navbar { background: rgba(15,23,42,0.96); border-bottom-color: var(--border); }
+   .dark .navbar-brand-name { color: var(--text); }
+   .dark .navbar-search { background: var(--card); border-color: var(--border); }
+   .dark .ns-input { color: var(--text-secondary); }
+   .dark .btn-list-car { color: var(--text); }
+   .dark .btn-list-car:hover { background: var(--card); }
+   .dark .nav-user-pill { background: var(--card); border-color: var(--border); }
+   .dark .dark-toggle-btn { background: var(--card); border-color: var(--border); }
+   .dark .dark-toggle-btn:hover { background: #2D3748; }
+   
+   /* Dropdowns */
+   .dark .user-dropdown { background: var(--card); border-color: var(--border); }
+   .dark .dropdown-item { color: var(--text); }
+   .dark .dropdown-item:hover { background: var(--bg); }
+   .dark .dropdown-divider { background: var(--border); }
+   
+   /* Hero search */
+   .dark .hero-search-bar { background: var(--card); border-color: var(--border); box-shadow: 0 8px 32px rgba(0,0,0,0.5); }
+   .dark .hsb-field label { color: var(--text); }
+   .dark .hsb-field input { color: var(--text-secondary); background: transparent; }
+   .dark .hsb-field input::placeholder { color: var(--text-muted); }
+   .dark .hsb-divider { background: var(--border); }
+   
+   /* Category pills */
+   .dark .cat-pill { background: var(--card); border-color: var(--border); color: var(--text-secondary); }
+   .dark .cat-pill:hover { border-color: var(--text); color: var(--text); }
+   .dark .cat-pill.active { background: var(--text); color: #0F172A; border-color: var(--text); }
+   
+   /* Landing cards */
+   .dark .lc-img-wrap { background: #1E293B; }
+   .dark .lc-location, .dark .lc-company, .dark .lc-meta { color: var(--text-secondary); }
+   .dark .lc-title { color: var(--text); }
+   .dark .lc-amount { color: var(--text); }
+   .dark .lc-per { color: var(--text-muted); }
+   .dark .lc-fav { text-shadow: 0 1px 3px rgba(0,0,0,0.6); }
+   
+   /* How section */
+   .dark .how-section { background: #1E293B; }
+   .dark .how-card h3 { color: var(--text); }
+   .dark .how-card p { color: var(--text-secondary); }
+   
+   /* Host banner stays dark — already dark colored, tweak opacity */
+   .dark .host-banner { background: linear-gradient(135deg, #0D1117, #1E3A5F); }
+   .dark .host-stat { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.1); }
+   
+   /* Footer */
+   .dark .footer { border-top-color: var(--border); }
+   .dark .fc h5 { color: var(--text); }
+   .dark .fc ul li { color: var(--text-secondary); }
+   .dark .fc ul li:hover { color: var(--text); }
+   .dark .footer-bottom-bar { border-top-color: var(--border); }
+   .dark .fbb-left { color: var(--text-secondary); }
+   .dark .fbb-right { color: var(--text-secondary); }
+   
+   /* Vehicle cards */
+   .dark .vehicle-card { background: var(--card); border-color: var(--border); }
+   .dark .car-img-wrap { background: #1E293B; }
+   .dark .card-company { color: var(--text-secondary); }
+   .dark .card-title { color: var(--text); }
+   .dark .card-meta-item { color: var(--text-secondary); }
+   .dark .card-footer { border-top-color: var(--border); }
+   .dark .card-price .amount { color: var(--text); }
+   .dark .card-favorite { background: rgba(30,41,59,0.9); border-color: rgba(255,255,255,0.1); color: var(--text); }
+   
+   /* Marketplace */
+   .dark #page-marketplace > div:first-child { background: linear-gradient(135deg,#1E2A3D,#0D2020); border-bottom-color: var(--border); }
+   .dark .filter-sidebar { background: var(--card); border-color: var(--border); }
+   .dark .filter-checkbox span { color: var(--text); }
+   .dark .sort-select { background-color: var(--card); border-color: var(--border); color: var(--text); }
+   .dark .search-bar-wrap input { background: var(--card); border-color: var(--border); color: var(--text); }
+   
+   /* Detail page */
+   .dark .detail-gallery .gallery-main { background: linear-gradient(135deg, #1E2A3D, #0D2E2E); }
+   .dark .gallery-thumb { background: #1E293B; border-color: var(--border); }
+   .dark .gallery-thumb.active { border-color: var(--text); }
+   .dark .gallery-all-btn { background: var(--card); border-color: var(--border); color: var(--text); }
+   .dark .detail-left { border-right-color: var(--border); }
+   .dark .detail-divider { background: var(--border); }
+   .dark .hl-item strong { color: var(--text); }
+   .dark .hl-item p { color: var(--text-secondary); }
+   .dark .spec-item { background: #1E293B; border-color: var(--border); }
+   .dark .spec-label { color: var(--text-secondary); }
+   .dark .spec-value { color: var(--text); }
+   .dark .review-card { border-color: var(--border); background: var(--card); }
+   
+   /* Booking widget */
+   .dark .booking-widget { background: var(--card); border-color: var(--border); box-shadow: 0 6px 32px rgba(0,0,0,0.5); }
+   .dark .bw-dates-box { border-color: var(--border); }
+   .dark .bw-date-cell { }
+   .dark .bw-date-cell input { color: var(--text); }
+   .dark .bw-date-sep { background: var(--border); }
+   .dark .bw-location-box { border-color: var(--border); }
+   .dark .bw-loc-input { color: var(--text); }
+   .dark .bw-renter-box { background: #0F172A; border-color: var(--border); }
+   .dark .bw-breakdown { border-top-color: var(--border); }
+   .dark .bw-total { border-top-color: var(--border); color: var(--text); }
+   .dark .bw-per { color: var(--text-secondary); }
+   .dark .bw-reviews { color: var(--text-muted); }
+   
+   /* Form inputs in dark mode */
+   .dark .form-input { background: #0F172A; border-color: var(--border); color: var(--text); }
+   .dark .form-input:focus { border-color: var(--primary); }
+   .dark .form-input::placeholder { color: var(--text-muted); }
+   .dark .form-label { color: var(--text); }
+   .dark .form-select { background-color: #0F172A; }
+   
+   /* Modals */
+   .dark .modal { background: var(--card); }
+   .dark .modal-header h3 { color: var(--text); }
+   .dark .modal-close { background: var(--card); border-color: var(--border); color: var(--text); }
+   .dark .modal-close:hover { background: var(--bg); }
+   .dark .btn-google { background: var(--card); border-color: var(--border); color: var(--text); }
+   .dark .btn-google:hover { background: #2D3748; }
+   .dark .auth-divider { color: var(--text-muted); }
+   .dark .auth-divider::before, .dark .auth-divider::after { background: var(--border); }
+   .dark .auth-switch { color: var(--text-secondary); }
+   .dark .auth-legal { color: var(--text-muted); }
+   .dark .auth-legal a { color: var(--text-secondary); }
+   .dark .btn-dark-full { background: #F1F5F9; color: #0F172A; }
+   .dark .btn-dark-full:hover { background: #E2E8F0; }
+   
+   /* Badges stay mostly as-is (colors already baked in) */
+   
+   /* Buttons */
+   .dark .btn-outline { border-color: var(--border); color: var(--text); }
+   .dark .btn-ghost { border-color: var(--border); color: var(--text); }
+   .dark .btn-ghost:hover, .dark .btn-outline:hover { background: var(--card); }
+   .dark .btn-dark-pill { background: #F1F5F9; color: #0F172A; }
+   
+   /* Compare */
+   .dark .comparison-table th { background: #1E293B; border-color: var(--border); color: var(--text); }
+   .dark .comparison-table td { border-color: var(--border); color: var(--text); }
+   .dark .comparison-table tr:hover td { background: #1E293B; }
+   .dark .feature-col { background: #1E293B !important; color: var(--text-secondary); }
+   .dark .comparison-table .highlight { background: #1E2E50 !important; }
+   
+   /* My Bookings */
+   .dark .my-booking-card { background: var(--card); border-color: var(--border); }
+   .dark .mbc-img { background: #1E293B; }
+   .dark .mbc-title { color: var(--text); }
+   .dark .mbc-sub { color: var(--text-secondary); }
+   .dark .mbc-dates { background: #0F172A; }
+   .dark .mbc-dv { color: var(--text); }
+   
+   /* Wishlist */
+   .dark .wishlist-card { background: var(--card); border-color: var(--border); }
+   .dark .wc-img-wrap { background: #1E293B; }
+   .dark .wc-title { color: var(--text); }
+   .dark .wc-location, .dark .wc-company, .dark .wc-meta { color: var(--text-secondary); }
+   .dark .wc-amount { color: var(--text); }
+   .dark .wc-footer { border-top-color: var(--border); }
+   .dark .wc-remove { background: var(--card); box-shadow: 0 2px 6px rgba(0,0,0,0.4); }
+   
+   /* Breadcrumb */
+   .dark .breadcrumb a { color: var(--text); }
+   .dark .breadcrumb span { color: var(--text-muted); }
+   
+   /* Dashboard sidebar */
+   .dark .sidebar { background: #0A0F1E; border-right-color: var(--border); }
+   .dark .sidebar-link { color: rgba(241,245,249,0.55); }
+   .dark .sidebar-link:hover { background: rgba(255,255,255,0.05); color: var(--text); }
+   .dark .sidebar-link.active { background: rgba(59,130,246,0.18); color: var(--primary); }
+   .dark .sidebar-section-title { color: rgba(241,245,249,0.3); }
+   .dark .dashboard-main { background: var(--bg); }
+   .dark .topbar { background: #1E293B; border-bottom-color: var(--border); }
+   .dark .topbar-title { color: var(--text); }
+   .dark .icon-btn { background: var(--card); border-color: var(--border); color: var(--text); }
+   .dark .stat-card { background: var(--card); border-color: var(--border); }
+   .dark .stat-label { color: var(--text-secondary); }
+   .dark .chart-card { background: var(--card); border-color: var(--border); }
+   .dark .chart-title { color: var(--text); }
+   .dark .chart-subtitle { color: var(--text-secondary); }
+   .dark .table-card { background: var(--card); border-color: var(--border); }
+   .dark .data-table th { color: var(--text-secondary); border-bottom-color: var(--border); }
+   .dark .data-table td { border-bottom-color: var(--border); color: var(--text); }
+   .dark .data-table tr:hover td { background: #0F172A; }
+   .dark .car-thumb { background: #1E293B; }
+   .dark .car-name { color: var(--text); }
+   .dark .car-brand { color: var(--text-secondary); }
+   .dark .action-btn { background: var(--card); border-color: var(--border); }
+   .dark .cal-day:hover:not(.empty) { background: #1E293B; }
+   .dark .hosting-tab { color: var(--text-secondary); }
+   .dark .hosting-tab.active { background: var(--card); color: var(--text); }
+   .dark .hosting-tabs { background: #0F172A; }
+   
+   /* Toasts */
+   .dark .toast { background: var(--card); border-color: var(--border); }
+   .dark .toast-title { color: var(--text); }
+   .dark .toast-msg { color: var(--text-secondary); }
+   
+   /* Page headers */
+   .dark #page-marketplace > div:first-child,
+   .dark #page-details > div:first-child { background: linear-gradient(135deg,#0F172A,#0D2E2E); }
+   .dark #page-my-bookings > div:first-child { background: linear-gradient(135deg,#0F172A,#0D2020); }
+   .dark #page-wishlist > div:first-child { background: linear-gradient(135deg,#1A0F12,#1A120A); }
+   .dark #page-compare > div:first-child { background: linear-gradient(135deg,#0F172A,#0D2E2E); }
+   
+   /* Section pills */
+   .dark .section-pill { background: #0D2E2E; color: var(--teal); }
+   
+   /* Sort select */
+   .dark .sort-select { color: var(--text); background-color: var(--card); }
+   
+   /* Wishlist footer */
+   .dark #wishlist-footer { border-top-color: var(--border); }

@@ -437,3 +437,23 @@ function showAdminToast(type, title, msg) {
   requestAnimationFrame(() => requestAnimationFrame(() => t.classList.add('show')));
   setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 3500);
 }
+
+/* ---- DARK MODE ---- */
+function toggleAdminDark() {
+  const isDark = document.documentElement.classList.toggle('dark');
+  localStorage.setItem('sakyan-admin-theme', isDark ? 'dark' : 'light');
+  const btn = document.getElementById('admin-dark-btn');
+  if (btn) btn.textContent = isDark ? '☀️' : '🌙';
+}
+// Init on load
+(function() {
+  const saved = localStorage.getItem('sakyan-admin-theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (saved === 'dark' || (!saved && prefersDark)) {
+    document.documentElement.classList.add('dark');
+    document.addEventListener('DOMContentLoaded', () => {
+      const btn = document.getElementById('admin-dark-btn');
+      if (btn) btn.textContent = '☀️';
+    });
+  }
+})();
