@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sakyan Admin — LakbayTech Solutions</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="admin.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+</head>
+<body class="admin-body">
+
+<!-- ADMIN LOGIN SCREEN -->
+<div id="admin-login-screen" class="admin-login-screen">
+  <div class="admin-login-card">
+    <div class="alc-brand">
+      <div class="admin-logo-mark">S</div>
+      <div>
+        <div class="alc-brand-name">Sakyan Admin</div>
+        <div class="alc-brand-sub">LakbayTech Solutions</div>
+      </div>
+    </div>
+    <h1 class="alc-title">Welcome back, Admin</h1>
+    <p class="alc-sub">Sign in to access the Sakyan control panel.</p>
+
+    <div id="alc-error" class="alc-error hidden">Invalid credentials. Try admin / admin123</div>
+
+    <div class="form-group" style="margin-bottom:14px">
+      <label class="form-label">Username</label>
+      <input class="form-input" id="admin-user" type="text" placeholder="admin" autocomplete="off">
+    </div>
+    <div class="form-group" style="margin-bottom:22px">
+      <label class="form-label">Password</label>
+      <input class="form-input" id="admin-pass" type="password" placeholder="••••••••">
+    </div>
+    <button class="btn-admin-login" onclick="adminLogin()">Sign in to Dashboard</button>
+    <div class="alc-hint">Demo credentials: <strong>admin</strong> / <strong>admin123</strong></div>
+    <a href="index.html" class="alc-back">← Back to Sakyan</a>
+  </div>
+</div>
+
+<!-- ADMIN DASHBOARD (hidden until login) -->
+<div id="admin-dashboard" class="hidden">
+
+  <!-- Sidebar -->
+  <aside class="admin-sidebar" id="admin-sidebar">
+    <div class="asb-header">
+      <div class="admin-logo-mark">S</div>
+      <div>
+        <div style="font-family:'Outfit',sans-serif;font-weight:800;color:#fff;font-size:1rem">Sakyan Admin</div>
+        <div style="font-size:.7rem;color:rgba(255,255,255,.5)">LakbayTech Solutions</div>
+      </div>
+    </div>
+
+    <nav class="asb-nav">
+      <div class="asb-section-label">Overview</div>
+      <a class="asb-link active" onclick="adminNav('overview',this)"><span>📊</span>Dashboard</a>
+      <a class="asb-link" onclick="adminNav('analytics',this)"><span>📈</span>Analytics</a>
+
+      <div class="asb-section-label">Marketplace</div>
+      <a class="asb-link" onclick="adminNav('companies',this)"><span>🏢</span>Rental Companies <span class="asb-badge">12</span></a>
+      <a class="asb-link" onclick="adminNav('vehicles',this)"><span>🚗</span>All Vehicles <span class="asb-badge">89</span></a>
+      <a class="asb-link" onclick="adminNav('bookings',this)"><span>📅</span>All Bookings <span class="asb-badge">247</span></a>
+
+      <div class="asb-section-label">Users</div>
+      <a class="asb-link" onclick="adminNav('customers',this)"><span>👥</span>Customers <span class="asb-badge">1.8K</span></a>
+      <a class="asb-link" onclick="adminNav('reviews',this)"><span>⭐</span>Reviews & Reports</a>
+
+      <div class="asb-section-label">Finance</div>
+      <a class="asb-link" onclick="adminNav('revenue',this)"><span>💰</span>Revenue</a>
+      <a class="asb-link" onclick="adminNav('payouts',this)"><span>💳</span>Partner Payouts</a>
+
+      <div class="asb-section-label">System</div>
+      <a class="asb-link" onclick="adminNav('settings',this)"><span>⚙️</span>Platform Settings</a>
+      <a class="asb-link" onclick="adminNav('logs',this)"><span>📝</span>Activity Logs</a>
+    </nav>
+
+    <div class="asb-footer">
+      <div class="asb-user">
+        <div class="asb-avatar">SA</div>
+        <div>
+          <div style="font-weight:700;color:#fff;font-size:.875rem">Super Admin</div>
+          <div style="font-size:.7rem;color:rgba(255,255,255,.5)">admin@sakyan.ph</div>
+        </div>
+        <button class="asb-logout" onclick="adminLogout()" title="Logout">⏻</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="admin-main" id="admin-main">
+
+    <!-- Top Bar -->
+    <div class="admin-topbar">
+      <div style="display:flex;align-items:center;gap:12px">
+        <button class="admin-menu-btn" onclick="toggleAdminSidebar()">☰</button>
+        <div>
+          <div class="atb-title" id="admin-page-title">Dashboard</div>
+          <div class="atb-breadcrumb" id="admin-breadcrumb">Sakyan Admin › Dashboard</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="atb-search">
+          <span>🔍</span>
+          <input type="text" placeholder="Search companies, bookings...">
+        </div>
+        <button class="atb-icon-btn" onclick="showAdminToast('info','No new alerts','All systems operational.')">🔔<span class="atb-notif-dot"></span></button>
+        <button class="atb-icon-btn" onclick="showAdminToast('info','Help','Documentation coming soon.')">❓</button>
+        <div class="atb-admin-pill" onclick="adminLogout()">
+          <div class="asb-avatar" style="width:28px;height:28px;font-size:.7rem">SA</div>
+          <span style="font-size:.875rem;font-weight:600">Super Admin</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTENT AREA -->
+    <div class="admin-content">
+
+      <!-- ===== OVERVIEW ===== -->
+      <div id="section-overview" class="admin-section">
+        <div class="admin-section-header">
+          <div>
+            <h2>Platform Overview</h2>
+            <p>Real-time metrics across the entire Sakyan marketplace.</p>
+          </div>
+          <div style="display:flex;gap:10px">
+            <select class="admin-select">
+              <option>Last 30 days</option>
+              <option>Last 90 days</option>
+              <option>This year</option>
+            </select>
+            <button class="btn-admin-primary" onclick="showAdminToast('success','Report exported','PDF report downloading...')">↓ Export Report</button>
+          </div>
+        </div>
+
+        <!-- KPI Cards -->
+        <div class="admin-kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-icon" style="background:#EFF6FF">🏢</div>
+            <div class="kpi-body">
+              <div class="kpi-value">12</div>
+              <div class="kpi-label">Rental Companies</div>
+              <div class="kpi-change up">+3 this month</div>
+            </div>
+            <div class="kpi-spark" id="spark-companies"></div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon" style="background:#F0FDFA">🚗</div>
+            <div class="kpi-body">
+              <div class="kpi-value">89</div>
+              <div class="kpi-label">Active Vehicles</div>
+              <div class="kpi-change up">+14 this month</div>
+            </div>
+            <div class="kpi-spark" id="spark-vehicles"></div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon" style="background:#F0FDF4">📅</div>
+            <div class="kpi-body">
+              <div class="kpi-value">247</div>
+              <div class="kpi-label">Total Bookings</div>
+              <div class="kpi-change up">+38 this month</div>
+            </div>
+            <div class="kpi-spark" id="spark-bookings"></div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon" style="background:#FFF7ED">👥</div>
+            <div class="kpi-body">
+              <div class="kpi-value">1,847</div>
+              <div class="kpi-label">Registered Customers</div>
+              <div class="kpi-change up">+124 this month</div>
+            </div>
+            <div class="kpi-spark" id="spark-users"></div>
+          </div>
+          <div class="kpi-card kpi-wide">
+            <div class="kpi-icon" style="background:#F0FDF4">💰</div>
+            <div class="kpi-body">
+              <div class="kpi-value">₱2.4M</div>
+              <div class="kpi-label">Gross Platform Revenue (YTD)</div>
+              <div class="kpi-change up">+24% vs last year</div>
+            </div>
+          </div>
+          <div class="kpi-card kpi-wide">
+            <div class="kpi-icon" style="background:#EFF6FF">📊</div>
+            <div class="kpi-body">
+              <div class="kpi-value">₱241K</div>
+              <div class="kpi-label">Platform Commission (YTD)</div>
+              <div class="kpi-change up">+18% vs last year</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="admin-charts-row">
+          <div class="admin-chart-card admin-chart-lg">
+            <div class="chart-head">
+              <div>
+                <div class="chart-head-title">Booking Volume & Revenue</div>
+                <div class="chart-head-sub">Monthly trend across all partners</div>
+              </div>
+              <div style="display:flex;gap:8px">
+                <button class="chart-tab active" onclick="toggleChartTab(this,'bookings-rev')">Bookings</button>
+                <button class="chart-tab" onclick="toggleChartTab(this,'revenue-trend')">Revenue</button>
+              </div>
+            </div>
+            <div style="height:280px"><canvas id="chart-bookings-rev"></canvas></div>
+          </div>
+          <div class="admin-chart-card">
+            <div class="chart-head"><div class="chart-head-title">Bookings by Location</div></div>
+            <div style="height:280px"><canvas id="chart-locations"></canvas></div>
+          </div>
+        </div>
+
+        <!-- Recent activity + pending approvals -->
+        <div class="admin-two-col">
+          <div class="admin-table-card">
+            <div class="atc-header">
+              <div class="atc-title">Pending Approvals</div>
+              <span class="admin-badge admin-badge-orange">4 pending</span>
+            </div>
+            <div class="pending-list">
+              <div class="pending-item">
+                <div class="pi-icon">🏢</div>
+                <div class="pi-info">
+                  <div class="pi-name">Mindanao Fleet Rentals</div>
+                  <div class="pi-meta">New company · Cagayan de Oro · Applied Jan 14</div>
+                </div>
+                <div style="display:flex;gap:6px">
+                  <button class="admin-btn-approve" onclick="approveCompany(this,'Mindanao Fleet Rentals')">Approve</button>
+                  <button class="admin-btn-reject" onclick="rejectCompany(this)">Reject</button>
+                </div>
+              </div>
+              <div class="pending-item">
+                <div class="pi-icon">🚗</div>
+                <div class="pi-info">
+                  <div class="pi-name">BMW M3 Competition</div>
+                  <div class="pi-meta">New listing · PremiumDrive PH · Jan 13</div>
+                </div>
+                <div style="display:flex;gap:6px">
+                  <button class="admin-btn-approve" onclick="approveCompany(this,'BMW M3')">Approve</button>
+                  <button class="admin-btn-reject" onclick="rejectCompany(this)">Reject</button>
+                </div>
+              </div>
+              <div class="pending-item">
+                <div class="pi-icon">🏢</div>
+                <div class="pi-info">
+                  <div class="pi-name">Palawan Island Rides</div>
+                  <div class="pi-meta">New company · Puerto Princesa · Applied Jan 12</div>
+                </div>
+                <div style="display:flex;gap:6px">
+                  <button class="admin-btn-approve" onclick="approveCompany(this,'Palawan Island Rides')">Approve</button>
+                  <button class="admin-btn-reject" onclick="rejectCompany(this)">Reject</button>
+                </div>
+              </div>
+              <div class="pending-item">
+                <div class="pi-icon">🚗</div>
+                <div class="pi-info">
+                  <div class="pi-name">Hyundai Santa Fe 2024</div>
+                  <div class="pi-meta">Updated listing · CebuDrive Co. · Jan 12</div>
+                </div>
+                <div style="display:flex;gap:6px">
+                  <button class="admin-btn-approve" onclick="approveCompany(this,'Santa Fe listing')">Approve</button>
+                  <button class="admin-btn-reject" onclick="rejectCompany(this)">Reject</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="admin-table-card">
+            <div class="atc-header">
+              <div class="atc-title">Recent Activity</div>
+              <button class="atc-link" onclick="adminNav('logs',document.querySelector('.asb-link:last-child'))">View all logs</button>
+            </div>
+            <div class="activity-list">
+              <div class="activity-item"><span class="act-dot green"></span><div><div class="act-text">ManilaRide Rentals confirmed booking <strong>BK-2025-047</strong></div><div class="act-time">2 min ago</div></div></div>
+              <div class="activity-item"><span class="act-dot blue"></span><div><div class="act-text">New customer <strong>Ana Reyes</strong> registered</div><div class="act-time">8 min ago</div></div></div>
+              <div class="activity-item"><span class="act-dot orange"></span><div><div class="act-text">CebuDrive Co. added 2 new vehicles</div><div class="act-time">24 min ago</div></div></div>
+              <div class="activity-item"><span class="act-dot green"></span><div><div class="act-text">Payout of <strong>₱48,200</strong> sent to BaguioCars</div><div class="act-time">1 hr ago</div></div></div>
+              <div class="activity-item"><span class="act-dot red"></span><div><div class="act-text">Booking <strong>BK-2025-041</strong> cancelled by customer</div><div class="act-time">2 hr ago</div></div></div>
+              <div class="activity-item"><span class="act-dot blue"></span><div><div class="act-text"><strong>Mindanao Fleet Rentals</strong> submitted registration</div><div class="act-time">3 hr ago</div></div></div>
+              <div class="activity-item"><span class="act-dot green"></span><div><div class="act-text">Platform revenue milestone: <strong>₱2M YTD</strong></div><div class="act-time">Yesterday</div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== ANALYTICS ===== -->
+      <div id="section-analytics" class="admin-section hidden">
+        <div class="admin-section-header">
+          <div><h2>Platform Analytics</h2><p>Deep insights across bookings, vehicles, and partners.</p></div>
+          <select class="admin-select"><option>Last 6 months</option><option>Last year</option></select>
+        </div>
+        <div class="admin-kpi-grid" style="grid-template-columns:repeat(4,1fr)">
+          <div class="kpi-card"><div class="kpi-icon" style="background:#EFF6FF">📊</div><div class="kpi-body"><div class="kpi-value">78%</div><div class="kpi-label">Fleet Utilization</div><div class="kpi-change up">+5% vs last month</div></div></div>
+          <div class="kpi-card"><div class="kpi-icon" style="background:#F0FDFA">⭐</div><div class="kpi-body"><div class="kpi-value">4.78</div><div class="kpi-label">Avg. Platform Rating</div><div class="kpi-change up">+0.12 this quarter</div></div></div>
+          <div class="kpi-card"><div class="kpi-icon" style="background:#F0FDF4">🔄</div><div class="kpi-body"><div class="kpi-value">34%</div><div class="kpi-label">Repeat Customers</div><div class="kpi-change up">+6% vs last month</div></div></div>
+          <div class="kpi-card"><div class="kpi-icon" style="background:#FFF7ED">⏱️</div><div class="kpi-body"><div class="kpi-value">3.2 days</div><div class="kpi-label">Avg. Rental Duration</div><div class="kpi-change up">+0.4 days</div></div></div>
+        </div>
+        <div class="admin-charts-row">
+          <div class="admin-chart-card admin-chart-lg">
+            <div class="chart-head"><div class="chart-head-title">Monthly Bookings by Vehicle Type</div></div>
+            <div style="height:280px"><canvas id="chart-type-breakdown"></canvas></div>
+          </div>
+          <div class="admin-chart-card">
+            <div class="chart-head"><div class="chart-head-title">Top Cities by Bookings</div></div>
+            <div style="height:280px"><canvas id="chart-cities"></canvas></div>
+          </div>
+        </div>
+        <div class="admin-chart-card" style="margin-top:20px">
+          <div class="chart-head"><div class="chart-head-title">Customer Growth</div><div class="chart-head-sub">New registrations per month</div></div>
+          <div style="height:200px"><canvas id="chart-customer-growth"></canvas></div>
+        </div>
+      </div>
+
+      <!-- ===== RENTAL COMPANIES ===== -->
+      <div id="section-companies" class="admin-section hidden">
+        <div class="admin-section-header">
+          <div><h2>Rental Companies</h2><p>All registered hosting partners on the Sakyan platform.</p></div>
+          <div style="display:flex;gap:10px">
+            <input type="text" class="admin-search-input" placeholder="Search companies..." oninput="filterAdminTable('companies-tbody',this.value)">
+            <button class="btn-admin-primary" onclick="showAdminModal('modal-add-company')">+ Add Company</button>
+          </div>
+        </div>
+
+        <!-- Stats strip -->
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px">
+          <div class="mini-stat"><div class="ms-num">12</div><div class="ms-lbl">Total Partners</div></div>
+          <div class="mini-stat"><div class="ms-num" style="color:#16A34A">9</div><div class="ms-lbl">Active</div></div>
+          <div class="mini-stat"><div class="ms-num" style="color:#F59E0B">2</div><div class="ms-lbl">Pending Review</div></div>
+          <div class="mini-stat"><div class="ms-num" style="color:#EF4444">1</div><div class="ms-lbl">Suspended</div></div>
+        </div>
+
+        <div class="admin-table-card">
+          <div style="overflow-x:auto">
+            <table class="admin-table">
+              <thead><tr>
+                <th>Company</th><th>Owner</th><th>Location</th><th>Vehicles</th><th>Bookings</th><th>Revenue</th><th>Rating</th><th>Status</th><th>Joined</th><th>Actions</th>
+              </tr></thead>
+              <tbody id="companies-tbody">
+                <!-- Rendered by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== VEHICLES ===== -->
+      <div id="section-vehicles" class="admin-section hidden">
+        <div class="admin-section-header">
+          <div><h2>All Vehicles</h2><p>Every listed vehicle across all rental companies.</p></div>
+          <div style="display:flex;gap:10px">
+            <input type="text" class="admin-search-input" placeholder="Search vehicles..." oninput="filterAdminTable('vehicles-tbody',this.value)">
+            <select class="admin-select" onchange="filterVehicleStatus(this.value)">
+              <option value="">All statuses</option>
+              <option value="Active">Active</option>
+              <option value="Pending">Pending</option>
+              <option value="Suspended">Suspended</option>
+            </select>
+          </div>
+        </div>
+        <div class="admin-table-card">
+          <div style="overflow-x:auto">
+            <table class="admin-table">
+              <thead><tr><th>Vehicle</th><th>Company</th><th>Type</th><th>Price/Day</th><th>Bookings</th><th>Rating</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="vehicles-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== BOOKINGS ===== -->
+      <div id="section-bookings" class="admin-section hidden">
+        <div class="admin-section-header">
+          <div><h2>All Bookings</h2><p>Every booking across all partners and customers.</p></div>
+          <div style="display:flex;gap:10px">
+            <input type="text" class="admin-search-input" placeholder="Search bookings..." oninput="filterAdminTable('bookings-tbody-admin',this.value)">
+            <button class="btn-admin-primary" onclick="showAdminToast('info','Exported','Booking report downloading...')">↓ Export CSV</button>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:24px">
+          <div class="mini-stat"><div class="ms-num">247</div><div class="ms-lbl">Total Bookings</div></div>
+          <div class="mini-stat"><div class="ms-num" style="color:#16A34A">183</div><div class="ms-lbl">Completed</div></div>
+          <div class="mini-stat"><div class="ms-num" style="color:#2563EB">32</div><div class="ms-lbl">Active</div></div>
+          <div class="mini-stat"><div class="ms-num" style="color:#F59E0B">18</div><div class="ms-lbl">Pending</div></div>
+          <div class="mini-stat"><div class="ms-num" style="color:#EF4444">14</div><div class="ms-lbl">Cancelled</div></div>
+        </div>
+        <div class="admin-table-card">
+          <div style="overflow-x:auto">
+            <table class="admin-table">
+              <thead><tr><th>Booking ID</th><th>Customer</th><th>Vehicle</th><th>Company</th><th>Dates</th><th>Days</th><th>Total</th><th>Commission</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="bookings-tbody-admin"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== CUSTOMERS ===== -->
+      <div id="section-customers" class="admin-section hidden">
+        <div class="admin-section-header">
+          <div><h2>Customers</h2><p>All registered users on the Sakyan platform.</p></div>
+          <div style="display:flex;gap:10px">
+            <input type="text" class="admin-search-input" placeholder="Search customers..." oninput="filterAdminTable('customers-tbody',this.value)">
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px">
+          <div class="mini-stat"><div class="ms-num">1,847</div><div class="ms-lbl">Total Customers</div></div>
+          <div class="mini-stat"><div class="ms-num" style="color:#16A34A">1,621</div><div class="ms-lbl">Active</div></div>
+          <div class="mini-stat"><div class="ms-num" style="color:#F59E0B">124</div><div class="ms-lbl">New This Month</div></div>
+          <div class="mini-stat"><div class="ms-num" style="color:#EF4444">12</div><div class="ms-lbl">Banned</div></div>
+        </div>
+        <div class="admin-table-card">
+          <div style="overflow-x:auto">
+            <table class="admin-table">
+              <thead><tr><th>Customer</th><th>Email</th><th>Phone</th><th>Location</th><th>Bookings</th><th>Total Spent</th><th>Joined</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="customers-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== REVIEWS ===== -->
+      <div id="section-reviews" class="admin-section hidden">
+        <div class="admin-section-header">
+          <div><h2>Reviews &amp; Reports</h2><p>Manage customer reviews and flagged content.</p></div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px">
+          <div class="mini-stat"><div class="ms-num">1,203</div><div class="ms-lbl">Total Reviews</div></div>
+          <div class="mini-stat"><div class="ms-num" style="color:#F59E0B">4.78 ⭐</div><div class="ms-lbl">Avg. Rating</div></div>
+          <div class="mini-stat"><div class="ms-num" style="color:#EF4444">7</div><div class="ms-lbl">Flagged Reviews</div></div>
+          <div class="mini-stat"><div class="ms-num" style="color:#F59E0B">3</div><div class="ms-lbl">Pending Moderation</div></div>
+        </div>
+        <div class="admin-table-card">
+          <div class="atc-header"><div class="atc-title">Flagged &amp; Pending Reviews</div></div>
+          <div style="display:flex;flex-direction:column;gap:14px;padding-top:4px">
+            <div class="review-mod-card">
+              <div class="rmc-header">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div class="author-avatar" style="width:36px;height:36px;font-size:.8rem;background:linear-gradient(135deg,#EF4444,#F97316)">AN</div>
+                  <div><div style="font-weight:700;font-size:.9rem">Anonymous User</div><div style="font-size:.75rem;color:var(--text-secondary)">Toyota Vios · ManilaRide Rentals · Jan 10</div></div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px">
+                  <span class="admin-badge admin-badge-orange">Flagged</span>
+                  <span style="color:#EF4444;font-weight:700">★★☆☆☆</span>
+                </div>
+              </div>
+              <p style="font-size:.9rem;color:var(--text-secondary);margin:10px 0">"Car was dirty and the host was rude when I called about the pickup location. Not happy with the experience at all."</p>
+              <div style="display:flex;gap:8px">
+                <button class="admin-btn-approve" onclick="showAdminToast('success','Approved','Review published.')">Approve</button>
+                <button class="admin-btn-reject" onclick="showAdminToast('info','Removed','Review hidden from public.')">Remove</button>
+                <button class="btn-admin-outline btn-sm" onclick="showAdminToast('info','Action taken','Host has been notified.')">Notify Host</button>
+              </div>
+            </div>
+            <div class="review-mod-card">
+              <div class="rmc-header">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div class="author-avatar" style="width:36px;height:36px;font-size:.8rem">PB</div>
+                  <div><div style="font-weight:700;font-size:.9rem">Pedro Bautista</div><div style="font-size:.75rem;color:var(--text-secondary)">Toyota HiAce · LagasLakbay · Jan 8</div></div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px">
+                  <span class="admin-badge" style="background:#FFF7ED;color:#EA580C">Pending</span>
+                  <span style="color:#F59E0B;font-weight:700">★★★☆☆</span>
+                </div>
+              </div>
+              <p style="font-size:.9rem;color:var(--text-secondary);margin:10px 0">"Van was okay but the AC was not working properly. Driver was friendly though. Would consider again if they fix the AC."</p>
+              <div style="display:flex;gap:8px">
+                <button class="admin-btn-approve" onclick="showAdminToast('success','Approved','Review published.')">Approve</button>
+                <button class="admin-btn-reject" onclick="showAdminToast('info','Removed','Review hidden.')">Remove</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== REVENUE ===== -->
+      <div id="section-revenue" class="admin-section hidden">
+        <div class="admin-section-header">
+          <div><h2>Revenue &amp; Finance</h2><p>Platform-wide financial overview and commission tracking.</p></div>
+          <button class="btn-admin-primary" onclick="showAdminToast('info','Exported','Financial report downloading...')">↓ Export Financials</button>
+        </div>
+        <div class="admin-kpi-grid" style="grid-template-columns:repeat(3,1fr)">
+          <div class="kpi-card"><div class="kpi-icon" style="background:#F0FDF4">💵</div><div class="kpi-body"><div class="kpi-value">₱2.4M</div><div class="kpi-label">Gross Revenue (YTD)</div><div class="kpi-change up">+24% vs last year</div></div></div>
+          <div class="kpi-card"><div class="kpi-icon" style="background:#EFF6FF">📊</div><div class="kpi-body"><div class="kpi-value">₱241K</div><div class="kpi-label">Platform Commission (10%)</div><div class="kpi-change up">+18% vs last year</div></div></div>
+          <div class="kpi-card"><div class="kpi-icon" style="background:#F0FDFA">💳</div><div class="kpi-body"><div class="kpi-value">₱2.16M</div><div class="kpi-label">Partner Payouts (YTD)</div><div class="kpi-change up">+22% vs last year</div></div></div>
+        </div>
+        <div class="admin-chart-card" style="margin-bottom:20px">
+          <div class="chart-head"><div class="chart-head-title">Monthly Revenue Breakdown</div><div class="chart-head-sub">Gross revenue vs. platform commission</div></div>
+          <div style="height:280px"><canvas id="chart-revenue-breakdown"></canvas></div>
+        </div>
+        <div class="admin-table-card">
+          <div class="atc-header"><div class="atc-title">Top Earning Partners (This Month)</div></div>
+          <div style="overflow-x:auto">
+            <table class="admin-table">
+              <thead><tr><th>Company</th><th>Bookings</th><th>Gross Revenue</th><th>Commission (10%)</th><th>Net Payout</th><th>Payout Status</th></tr></thead>
+              <tbody id="revenue-partners-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== PAYOUTS ===== -->
+      <div id="section-payouts" class="admin-section hidden">
+        <div class="admin-section-header">
+          <div><h2>Partner Payouts</h2><p>Manage and release payouts to rental companies.</p></div>
+          <button class="btn-admin-primary" onclick="showAdminToast('success','Payouts processed','All pending payouts have been released.')">Process All Pending</button>
+        </div>
+        <div class="admin-table-card">
+          <div style="overflow-x:auto">
+            <table class="admin-table">
+              <thead><tr><th>Company</th><th>Period</th><th>Bookings</th><th>Gross</th><th>Commission</th><th>Net Payout</th><th>Bank Account</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="payouts-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== SETTINGS ===== -->
+      <div id="section-settings" class="admin-section hidden">
+        <div class="admin-section-header">
+          <div><h2>Platform Settings</h2><p>Configure global settings for the Sakyan marketplace.</p></div>
+          <button class="btn-admin-primary" onclick="showAdminToast('success','Saved','Platform settings updated.')">Save All Changes</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+          <div class="admin-settings-card">
+            <h3>💰 Commission &amp; Fees</h3>
+            <div class="form-group" style="margin-bottom:14px"><label class="form-label">Platform Commission Rate</label><div style="display:flex;align-items:center;gap:10px"><input class="form-input" type="number" value="10" style="max-width:100px"> <span style="color:var(--text-secondary)">% per booking</span></div></div>
+            <div class="form-group" style="margin-bottom:14px"><label class="form-label">Service Fee (charged to customer)</label><div style="display:flex;align-items:center;gap:10px"><input class="form-input" type="number" value="10" style="max-width:100px"> <span style="color:var(--text-secondary)">% of rental total</span></div></div>
+            <div class="form-group"><label class="form-label">Fixed Insurance Fee</label><div style="display:flex;align-items:center;gap:10px"><span style="color:var(--text-secondary)">₱</span><input class="form-input" type="number" value="500" style="max-width:100px"> <span style="color:var(--text-secondary)">per booking</span></div></div>
+          </div>
+          <div class="admin-settings-card">
+            <h3>🏢 Company Onboarding</h3>
+            <div class="form-group" style="margin-bottom:14px"><label class="form-label">Require Manual Approval</label><div style="display:flex;align-items:center;gap:10px"><input type="checkbox" checked style="width:18px;height:18px;accent-color:var(--primary)"><span style="font-size:.9rem;color:var(--text-secondary)">New companies require admin review</span></div></div>
+            <div class="form-group" style="margin-bottom:14px"><label class="form-label">Require Vehicle Inspection</label><div style="display:flex;align-items:center;gap:10px"><input type="checkbox" style="width:18px;height:18px;accent-color:var(--primary)"><span style="font-size:.9rem;color:var(--text-secondary)">Vehicles need inspection before listing</span></div></div>
+            <div class="form-group"><label class="form-label">Max Vehicles per Company (free tier)</label><input class="form-input" type="number" value="10" style="max-width:100px"></div>
+          </div>
+          <div class="admin-settings-card">
+            <h3>🔒 Cancellation Policy</h3>
+            <div class="form-group" style="margin-bottom:14px"><label class="form-label">Free Cancellation Window</label><div style="display:flex;align-items:center;gap:10px"><input class="form-input" type="number" value="48" style="max-width:80px"><span style="color:var(--text-secondary)">hours before pickup</span></div></div>
+            <div class="form-group"><label class="form-label">Late Cancellation Fee</label><div style="display:flex;align-items:center;gap:10px"><input class="form-input" type="number" value="20" style="max-width:80px"><span style="color:var(--text-secondary)">% of booking total</span></div></div>
+          </div>
+          <div class="admin-settings-card">
+            <h3>📧 Notifications</h3>
+            <div class="form-group" style="margin-bottom:12px"><label class="form-label">Admin Email</label><input class="form-input" type="email" value="admin@sakyan.ph"></div>
+            <div class="form-group" style="margin-bottom:12px"><label class="form-label">Alert on New Company Registration</label><input type="checkbox" checked style="width:18px;height:18px;accent-color:var(--primary)"></div>
+            <div class="form-group"><label class="form-label">Alert on Flagged Reviews</label><input type="checkbox" checked style="width:18px;height:18px;accent-color:var(--primary)"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== LOGS ===== -->
+      <div id="section-logs" class="admin-section hidden">
+        <div class="admin-section-header">
+          <div><h2>Activity Logs</h2><p>Full audit trail of all platform activity.</p></div>
+          <button class="btn-admin-primary" onclick="showAdminToast('info','Exported','Logs exported as CSV.')">↓ Export Logs</button>
+        </div>
+        <div class="admin-table-card">
+          <div style="overflow-x:auto">
+            <table class="admin-table">
+              <thead><tr><th>Timestamp</th><th>Type</th><th>Actor</th><th>Action</th><th>Details</th></tr></thead>
+              <tbody id="logs-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /admin-content -->
+  </div><!-- /admin-main -->
+</div><!-- /admin-dashboard -->
+
+<!-- Add Company Modal -->
+<div class="modal-overlay" id="modal-add-company">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-header"><h3>Add Rental Company</h3><button class="modal-close" onclick="hideAdminModal('modal-add-company')">✕</button></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+      <div class="form-group"><label class="form-label">Company Name *</label><input class="form-input" id="nc-name" placeholder="e.g. ManilaRide Rentals"></div>
+      <div class="form-group"><label class="form-label">Owner Name *</label><input class="form-input" id="nc-owner" placeholder="Full name"></div>
+      <div class="form-group"><label class="form-label">Email *</label><input class="form-input" type="email" id="nc-email" placeholder="info@company.ph"></div>
+      <div class="form-group"><label class="form-label">Phone</label><input class="form-input" id="nc-phone" placeholder="+63 9XX XXX XXXX"></div>
+      <div class="form-group"><label class="form-label">City / Location</label><input class="form-input" id="nc-location" placeholder="Makati, Metro Manila"></div>
+      <div class="form-group"><label class="form-label">Status</label><select class="form-input form-select"><option>Active</option><option>Pending</option><option>Suspended</option></select></div>
+    </div>
+    <div class="form-group" style="margin-bottom:18px"><label class="form-label">Notes</label><textarea class="form-input" rows="2" placeholder="Any notes about this company..."></textarea></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button class="btn-admin-outline" onclick="hideAdminModal('modal-add-company')">Cancel</button>
+      <button class="btn-admin-primary" onclick="addAdminCompany()">Add Company</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="admin-toast-container" style="position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:10px"></div>
+
+<script src="admin.js"></script>
+</body>
+</html>
